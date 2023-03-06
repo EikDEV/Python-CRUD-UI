@@ -43,13 +43,19 @@ class Funcs():
             msg = "Para CADASTRAR um novo produto, é necessário preencher todos os campos corretamente."
             messagebox.showinfo("Aviso", msg)
         else:
-            self.conecta_db()
-            command = f'insert into tb_vendas (nome_produto, valor_produto, qtd_produto) values ("{nome}", "{valor}", "{qtd}");'
-            self.cursor.execute(command)
-            self.conn.commit()
-            self.limpa_tela()
-            self.busca_auto_db()
-            self.desconecta_db()
+            msg_sim_nao = messagebox.askyesno("Aviso", f'CRIAR o novo produto {nome}?')
+            if msg_sim_nao == True:
+                self.conecta_db()
+                command = f'insert into tb_vendas (nome_produto, valor_produto, qtd_produto) values ("{nome}", "{valor}", "{qtd}");'
+                self.cursor.execute(command)
+                self.conn.commit()
+                self.limpa_tela()
+                self.busca_auto_db()
+                self.desconecta_db()
+                messagebox.showinfo("Aviso", "Produto CRIADO com sucesso!")
+            else:
+                msg = messagebox.showinfo("Aviso", "Operação cancelada!")
+                self.limpa_tela()
     def atualiza_bd(self):
         id = self.id_entry.get()
         nome = self.nome_entry.get()
@@ -59,26 +65,38 @@ class Funcs():
             msg = "Para ALTERAR um produto existente, é necessário preencher todos os campos corretamente."
             messagebox.showwarning("Aviso", msg)
         else:
-            self.conecta_db()
-            command = f'update tb_vendas set nome_produto = "{nome}", valor_produto = "{valor}", qtd_produto = "{qtd}" where id_produto = "{id}";'
-            self.cursor.execute(command)
-            self.conn.commit()
-            self.limpa_tela()
-            self.busca_auto_db()
-            self.desconecta_db()
+            msg_sim_nao = messagebox.askyesno("Aviso", f'Deseja realmente ATUALIZAR o produto de ID {id} para {nome}, R${valor} e quantidade {qtd}?')
+            if msg_sim_nao == True:
+                self.conecta_db()
+                command = f'update tb_vendas set nome_produto = "{nome}", valor_produto = "{valor}", qtd_produto = "{qtd}" where id_produto = "{id}";'
+                self.cursor.execute(command)
+                self.conn.commit()
+                self.limpa_tela()
+                self.busca_auto_db()
+                self.desconecta_db()
+                messagebox.showinfo("Aviso", "Produto ALTERADO com sucesso!")
+            else:
+                msg = messagebox.showinfo("Aviso", "Operação cancelada!")
+                self.limpa_tela()
     def apaga_bd(self):
         id = self.id_entry.get()
         if id == "":
             msg = "Para APAGAR um produto existente, é necessário preencher o campo corretamente."
             messagebox.showwarning("Aviso", msg)
         else:
-            self.conecta_db()
-            command = f'delete from tb_vendas where id_produto = {id};'
-            self.cursor.execute(command)
-            self.conn.commit()
-            self.limpa_tela()
-            self.busca_auto_db()
-            self.desconecta_db()
+            msg_sim_nao = messagebox.askyesno("Aviso", f'Deseja realmente APAGAR o produto de ID {id}?')
+            if msg_sim_nao == True:
+                self.conecta_db()
+                command = f'delete from tb_vendas where id_produto = {id};'
+                self.cursor.execute(command)
+                self.conn.commit()
+                self.limpa_tela()
+                self.busca_auto_db()
+                self.desconecta_db()
+                messagebox.showinfo("Aviso", "Produto APAGADO com sucesso!")
+            else:
+                msg = messagebox.showinfo("Aviso", "Operação cancelada!")
+                self.limpa_tela()
     def duplo_click(self, event):
         self.limpa_tela()
         self.lista.selection()
